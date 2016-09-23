@@ -16,15 +16,15 @@ router.post('/image', function(req, res) {
       return res.render('index', { title: 'Please choose a file!' });
     }
     if (mimetype !== 'image/jpeg' && mimetype !== 'image/png') {
-      return res.render('index', { title: 'Please choose a valid image' });
+      return res.render('index', { title: 'Please choose valid image' });
     }
     console.log('Uploading: ',filename);
     fstream = fs.createWriteStream(path.join(__dirname, '/uploads/', filename));
     file.pipe(fstream);
-    return fstream.on('close', () => {
-      console.log(filename,': Upload successful!');
-      return res.render('index', { title: 'Image uploaded successfully!' });
-    });
+  });
+  req.busboy.on('finish', function() {
+    console.log('Upload successful');
+    return res.render('index', { title: 'Upload successful!' });
   });
 });
 
